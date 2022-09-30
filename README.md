@@ -2,10 +2,8 @@
     <br />
     DotSQL
     <br />
+    <font style="font-size:18px;">Integrated Database-Helper for .NET</font>
 </h1>
-<h3 align="center">
-Integrated Database-Helper for .NET
-</h3>
 <br />
 <hr>
 <br />
