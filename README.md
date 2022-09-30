@@ -23,7 +23,7 @@ Supported Platforms:
 Supported Databases:
 
 - MySQL, MariaDB (MySQL Family)
-- SQLite (x86, amd64 only on Linux, OSX)
+- SQLite (amd64 only on Linux, OSX)
 
 <br />
 <hr>
