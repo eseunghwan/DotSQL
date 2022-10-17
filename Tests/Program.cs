@@ -9,10 +9,10 @@ namespace DotSQL.Test {
 
     internal class Program {
         static void Main(String[] args) {
-            var sql = new SQL.DotSQL(new Builder.MariadbBuilder {
+            var engine = new SQL.Engine(new Builder.MariadbBuilder {
                 UserID = "root", Password = "root", Database = "test"
             });
-            var res = sql.Execute("select * from `test`;");
+            var res = engine.Execute("select * from `test`;");
 
             var dictRes = res.AsDict();
             var dtRes = res.AsTable();

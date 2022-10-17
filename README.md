@@ -41,12 +41,12 @@ nuget package is not available not
 using DotSQL.Builder;
 using DotSQL.SQL;
 
-var sql = new DotSQL(new MariadbBuilder {
+var engine = new Engine(new MariadbBuilder {
     UserID = "{UserID}", Password = "{Password}",
     Host = "{Host}", Port = {Port},
     Database = "{Database}"
 });
-var result = sql.Execute("{query}");
+var result = engine.Execute("{query}");
 
 result.AsDict(); // to List of Dictionary
 result.AsTable(); // to System.Data.DataTable

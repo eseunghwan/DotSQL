@@ -79,10 +79,10 @@ namespace DotSQL.SQL {
     }
 
 
-    public class DotSQL {
+    public class Engine {
         private IExecutor Executor;
 
-        public DotSQL(Builder.IBuilder builder) {
+        public Engine(Builder.IBuilder builder) {
             if (builder is Builder.SqliteBuilder) {
                 this.Executor = new SqliteExecutor(builder as Builder.SqliteBuilder);
             }
