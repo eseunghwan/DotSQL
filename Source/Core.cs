@@ -1,6 +1,5 @@
 
 using System;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Data;
@@ -57,23 +56,33 @@ namespace DotSQL.Core {
         }
 
         public static Result BuildSqliteResult(System.Data.SQLite.SQLiteDataReader reader) {
-            var columns = reader.GetColumnSchema();
-            var datas = new List<List<dynamic>>();
-            while (reader.Read()) {
-                datas.Add(Result.ParseRow(reader, columns));
-            }
+            try {
+                var columns = reader.GetColumnSchema();
+                var datas = new List<List<dynamic>>();
+                while (reader.Read()) {
+                    datas.Add(Result.ParseRow(reader, columns));
+                }
 
-            return new Result(new ResultSet { Columns = columns, Datas = datas });
+                return new Result(new ResultSet { Columns = columns, Datas = datas });
+            }
+            catch (Exception e) {
+                throw new Exceptions.BuildResultFailedException(e.Message, e.InnerException);
+            }
         }
 
         public static Result BuildMysqlResult(MySqlConnector.MySqlDataReader reader) {
-            var columns = reader.GetColumnSchema();
-            var datas = new List<List<dynamic>>();
-            while (reader.Read()) {
-                datas.Add(Result.ParseRow(reader, columns));
-            }
+            try {
+                var columns = reader.GetColumnSchema();
+                var datas = new List<List<dynamic>>();
+                while (reader.Read()) {
+                    datas.Add(Result.ParseRow(reader, columns));
+                }
 
-            return new Result(new ResultSet { Columns = columns, Datas = datas });
+                return new Result(new ResultSet { Columns = columns, Datas = datas });
+            }
+            catch (Exception e) {
+                throw new Exceptions.BuildResultFailedException(e.Message, e.InnerException);
+            }
         }
 
         public static Result BuildMariadbResult(MySqlConnector.MySqlDataReader reader) {
@@ -85,37 +94,47 @@ namespace DotSQL.Core {
         }
 
         public List<Dictionary<String, dynamic>> AsDict() {
-            var result = new List<Dictionary<String, dynamic>>();
-            foreach (var data in this.Resultset.Datas) {
-                var resultRow = new Dictionary<String, dynamic>();
-                for (var cidx = 0; cidx < this.Resultset.Columns.Count; cidx++) {
-                    resultRow[this.Resultset.Columns[cidx].ColumnName] = data[cidx];
+            try {
+                var result = new List<Dictionary<String, dynamic>>();
+                foreach (var data in this.Resultset.Datas) {
+                    var resultRow = new Dictionary<String, dynamic>();
+                    for (var cidx = 0; cidx < this.Resultset.Columns.Count; cidx++) {
+                        resultRow[this.Resultset.Columns[cidx].ColumnName] = data[cidx];
+                    }
+
+                    result.Add(resultRow);
                 }
 
-                result.Add(resultRow);
+                return result;
             }
-
-            return result;
+            catch (Exception e) {
+                throw new Exceptions.ResultConversionFailedException(e.Message, e.InnerException);
+            }
         }
 
         public DataTable AsTable() {
-            var result = new DataTable();
-            foreach (var column in this.Resultset.Columns) {
-                var dtCol = new DataColumn();
-                dtCol.ColumnName = column.ColumnName;
-                dtCol.DataType = column.DataType;
-                result.Columns.Add(dtCol);
-            }
-            foreach (var data in this.Resultset.Datas) {
-                var row = result.NewRow();
-                for (var cidx = 0; cidx < this.Resultset.Columns.Count; cidx++) {
-                    row[this.Resultset.Columns[cidx].ColumnName] = data[cidx];
+            try {
+                var result = new DataTable();
+                foreach (var column in this.Resultset.Columns) {
+                    var dtCol = new DataColumn();
+                    dtCol.ColumnName = column.ColumnName;
+                    dtCol.DataType = column.DataType;
+                    result.Columns.Add(dtCol);
+                }
+                foreach (var data in this.Resultset.Datas) {
+                    var row = result.NewRow();
+                    for (var cidx = 0; cidx < this.Resultset.Columns.Count; cidx++) {
+                        row[this.Resultset.Columns[cidx].ColumnName] = data[cidx];
+                    }
+
+                    result.Rows.Add(row);
                 }
 
-                result.Rows.Add(row);
+                return result;
             }
-
-            return result;
+            catch (Exception e) {
+                throw new Exceptions.ResultConversionFailedException(e.Message, e.InnerException);
+            }
         }
 
         public List<T> AsModel<T>() {

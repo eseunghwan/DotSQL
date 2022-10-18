@@ -21,7 +21,12 @@ namespace DotSQL.Executors {
         }
 
         public Core.Result Execute(String query) {
-            this.Con.Open();
+            try {
+                this.Con.Open();
+            }
+            catch (System.Data.SQLite.SQLiteException e) {
+                throw new Exceptions.ConnectionFailedException(e.Message, e.InnerException);
+            }
 
             var cmd = this.Con.CreateCommand();
             cmd.CommandText = query;
@@ -34,7 +39,12 @@ namespace DotSQL.Executors {
         }
 
         public async Task<Core.Result> ExecuteAsync(String query) {
-            this.Con.Open();
+            try {
+                this.Con.Open();
+            }
+            catch (System.Data.SQLite.SQLiteException e) {
+                throw new Exceptions.ConnectionFailedException(e.Message, e.InnerException);
+            }
 
             var cmd = this.Con.CreateCommand();
             cmd.CommandText = query;
@@ -59,7 +69,12 @@ namespace DotSQL.Executors {
         }
 
         public Core.Result Execute(String query) {
-            this.Con.Open();
+            try {
+                this.Con.Open();
+            }
+            catch (MySqlConnector.MySqlException e) {
+                throw new Exceptions.ConnectionFailedException(e.Message, e.InnerException);
+            }
             
             var cmd = this.Con.CreateCommand();
             cmd.CommandText = query;
@@ -72,7 +87,12 @@ namespace DotSQL.Executors {
         }
 
         public async Task<Core.Result> ExecuteAsync(String query) {
-            this.Con.Open();
+            try {
+                this.Con.Open();
+            }
+            catch (MySqlConnector.MySqlException e) {
+                throw new Exceptions.ConnectionFailedException(e.Message, e.InnerException);
+            }
             
             var cmd = this.Con.CreateCommand();
             cmd.CommandText = query;
@@ -97,7 +117,12 @@ namespace DotSQL.Executors {
         }
 
         public Core.Result Execute(String query) {
-            this.Con.Open();
+            try {
+                this.Con.Open();
+            }
+            catch (MySqlConnector.MySqlException e) {
+                throw new Exceptions.ConnectionFailedException(e.Message, e.InnerException);
+            }
             
             var cmd = this.Con.CreateCommand();
             cmd.CommandText = query;
@@ -110,7 +135,12 @@ namespace DotSQL.Executors {
         }
 
         public async Task<Core.Result> ExecuteAsync(String query) {
-            this.Con.Open();
+            try {
+                this.Con.Open();
+            }
+            catch (MySqlConnector.MySqlException e) {
+                throw new Exceptions.ConnectionFailedException(e.Message, e.InnerException);
+            }
             
             var cmd = this.Con.CreateCommand();
             cmd.CommandText = query;

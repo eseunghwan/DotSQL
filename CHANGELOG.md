@@ -13,3 +13,4 @@
 - change 'SQL' namespace to 'Engine'.
 - merge 'Classes.cs' and 'Interfaces.cs' into one file.
 - add 'ExecuteAsync' to Engine.
+- add Exceptions.
