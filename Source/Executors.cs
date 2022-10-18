@@ -1,9 +1,19 @@
 
 using System;
+using System.Threading.Tasks;
 
 
-namespace DotSQL.SQL {
-    internal class SqliteExecutor: IExecutor {
+namespace DotSQL.Executors {
+    namespace Interfaces {
+        internal interface IExecutor {
+            Core.Result Execute(String query);
+            Task<Core.Result> ExecuteAsync(String query);
+
+            System.Data.Common.DbConnection RawConnection();
+        }
+    }
+
+    internal class SqliteExecutor: Interfaces.IExecutor {
         private System.Data.SQLite.SQLiteConnection Con;
 
         public SqliteExecutor(Builder.SqliteBuilder builder) {
@@ -23,12 +33,25 @@ namespace DotSQL.SQL {
             return result;
         }
 
+        public async Task<Core.Result> ExecuteAsync(String query) {
+            this.Con.Open();
+
+            var cmd = this.Con.CreateCommand();
+            cmd.CommandText = query;
+
+            var result = Core.Result.BuildSqliteResult((await cmd.ExecuteReaderAsync()) as System.Data.SQLite.SQLiteDataReader);
+
+            this.Con.Close();
+
+            return result;
+        }
+
         public System.Data.Common.DbConnection RawConnection() {
             return this.Con;
         }
     }
 
-    internal class MySqlExecutor: IExecutor {
+    internal class MySqlExecutor: Interfaces.IExecutor {
         private MySqlConnector.MySqlConnection Con;
 
         public MySqlExecutor(Builder.MySqlBuilder builder) {
@@ -48,12 +71,25 @@ namespace DotSQL.SQL {
             return result;
         }
 
+        public async Task<Core.Result> ExecuteAsync(String query) {
+            this.Con.Open();
+            
+            var cmd = this.Con.CreateCommand();
+            cmd.CommandText = query;
+
+            var result = Core.Result.BuildMysqlResult((await cmd.ExecuteReaderAsync()) as MySqlConnector.MySqlDataReader);
+
+            this.Con.Close();
+
+            return result;
+        }
+
         public System.Data.Common.DbConnection RawConnection() {
             return this.Con;
         }
     }
 
-    internal class MariadbExecutor: IExecutor {
+    internal class MariadbExecutor: Interfaces.IExecutor {
         private MySqlConnector.MySqlConnection Con;
 
         public MariadbExecutor(Builder.MariadbBuilder builder) {
@@ -73,33 +109,21 @@ namespace DotSQL.SQL {
             return result;
         }
 
+        public async Task<Core.Result> ExecuteAsync(String query) {
+            this.Con.Open();
+            
+            var cmd = this.Con.CreateCommand();
+            cmd.CommandText = query;
+
+            var result = Core.Result.BuildMariadbResult((await cmd.ExecuteReaderAsync()) as MySqlConnector.MySqlDataReader);
+
+            this.Con.Close();
+
+            return result;
+        }
+
         public System.Data.Common.DbConnection RawConnection() {
             return this.Con;
-        }
-    }
-
-
-    public class Engine {
-        private IExecutor Executor;
-
-        public Engine(Builder.IBuilder builder) {
-            if (builder is Builder.SqliteBuilder) {
-                this.Executor = new SqliteExecutor(builder as Builder.SqliteBuilder);
-            }
-            else if (builder is Builder.MySqlBuilder) {
-                this.Executor = new MySqlExecutor(builder as Builder.MySqlBuilder);
-            }
-            else if (builder is Builder.MariadbBuilder) {
-                this.Executor = new MariadbExecutor(builder as Builder.MariadbBuilder);
-            }
-        }
-
-        public Core.Result Execute(String query) {
-            return this.Executor.Execute(query);
-        }
-
-        public System.Data.Common.DbConnection RawConnection() {
-            return this.Executor.RawConnection();
         }
     }
 }

@@ -47,6 +47,8 @@ var engine = new Engine(new MariadbBuilder {
     Database = "{Database}"
 });
 var result = engine.Execute("{query}");
+// use ExecuteAsync method also.
+// var result = await engine.ExecuteAsync("{query}");
 
 result.AsDict(); // to List of Dictionary
 result.AsTable(); // to System.Data.DataTable

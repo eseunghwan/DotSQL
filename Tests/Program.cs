@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.Threading.Tasks;
+
 
 namespace DotSQL.Test {
     public class TestItem {
@@ -8,11 +10,11 @@ namespace DotSQL.Test {
     }
 
     internal class Program {
-        static void Main(String[] args) {
-            var engine = new SQL.Engine(new Builder.MariadbBuilder {
+        static async Task Main(String[] args) {
+            var engine = new Engine.Engine(new Builder.MariadbBuilder {
                 UserID = "root", Password = "root", Database = "test"
             });
-            var res = engine.Execute("select * from `test`;");
+            var res = await engine.ExecuteAsync("select * from `test`;");
 
             var dictRes = res.AsDict();
             var dtRes = res.AsTable();
