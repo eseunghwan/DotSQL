@@ -145,10 +145,11 @@ namespace DotSQL.Core {
                 for (var cidx = 0; cidx < this.Resultset.Columns.Count; cidx++) {
                     var column = this.Resultset.Columns[cidx];
                     var prop = tt.GetProperty(column.ColumnName);
-                    if (prop.PropertyType.Equals(column.DataType)) {
+
+                    if (prop != null && prop.PropertyType.Equals(column.DataType)) {
                         prop.SetValue(model, data[cidx]);
                     }
-                    else {
+                    else if (prop != null) {
                         prop.SetValue(model, null);
                     }
                 }
