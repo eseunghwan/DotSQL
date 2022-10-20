@@ -15,3 +15,9 @@
 - merge 'Classes.cs' and 'Interfaces.cs' into one file.
 - add 'ExecuteAsync' to Engine.
 - add Exceptions.
+
+<br />
+
+## 0.0.4
+- add exception catch to 'Result.ParseRow'.
+  - now add null value correctly.

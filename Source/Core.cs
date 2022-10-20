@@ -21,34 +21,79 @@ namespace DotSQL.Core {
             for (var idx = 0; idx < columns.Count; idx++) {
                 var columnType = columns[idx].DataType;
                 if (columnType.Equals(typeof(Int16))) {
-                    row.Add(reader.GetInt16(idx));
+                    try {
+                        row.Add(reader.GetInt16(idx));
+                    }
+                    catch (System.InvalidCastException) {
+                        row.Add(null);
+                    }
                 }
                 else if (columnType.Equals(typeof(Int32))) {
-                    row.Add(reader.GetInt32(idx));
+                    try {
+                        row.Add(reader.GetInt32(idx));
+                    }
+                    catch (System.InvalidCastException) {
+                        row.Add(null);
+                    }
                 }
                 else if (columnType.Equals(typeof(Int64))) {
-                    row.Add(reader.GetInt64(idx));
+                    try {
+                        row.Add(reader.GetInt64(idx));
+                    }
+                    catch (System.InvalidCastException) {
+                        row.Add(null);
+                    }
                 }
                 else if (columnType.Equals(typeof(Decimal))) {
-                    row.Add(reader.GetDecimal(idx));
+                    try {
+                        row.Add(reader.GetDecimal(idx));
+                    }
+                    catch (System.InvalidCastException) {
+                        row.Add(null);
+                    }
                 }
                 else if (columnType.Equals(typeof(Double))) {
-                    row.Add(reader.GetDouble(idx));
+                    try {
+                        row.Add(reader.GetDouble(idx));
+                    }
+                    catch (System.InvalidCastException) {
+                        row.Add(null);
+                    }
                 }
                 else if (columnType.Equals(typeof(float))) {
-                    row.Add(reader.GetFloat(idx));
+                    try {
+                        row.Add(reader.GetFloat(idx));
+                    }
+                    catch (System.InvalidCastException) {
+                        row.Add(null);
+                    }
                 }
                 else if (columnType.Equals(typeof(Boolean))) {
-                    row.Add(reader.GetBoolean(idx));
+                    try {
+                        row.Add(reader.GetBoolean(idx));
+                    }
+                    catch (System.InvalidCastException) {
+                        row.Add(null);
+                    }
                 }
                 else if (columnType.Equals(typeof(DateTime))) {
-                    row.Add(reader.GetDateTime(idx));
+                    try {
+                        row.Add(reader.GetDateTime(idx));
+                    }
+                    catch (System.InvalidCastException) {
+                        row.Add(null);
+                    }
                 }
                 else if (columnType.Equals(typeof(String)) || columnType.Equals(typeof(Char))) {
-                    row.Add(reader.GetString(idx));
+                    try {
+                        row.Add(reader.GetString(idx));
+                    }
+                    catch (System.InvalidCastException) {
+                        row.Add(null);
+                    }
                 }
                 else {
-                    row.Add(Double.NaN);
+                    row.Add(null);
                 }
             }
 
