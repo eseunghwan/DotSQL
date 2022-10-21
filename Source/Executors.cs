@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 namespace DotSQL.Executors {
     namespace Interfaces {
         internal interface IExecutor {
-            Core.Result Execute(String query);
-            Task<Core.Result> ExecuteAsync(String query);
+            public Core.Result Execute(String query);
+            public Task<Core.Result> ExecuteAsync(String query);
 
-            System.Data.Common.DbConnection RawConnection();
+            public System.Data.Common.DbConnection RawConnection();
         }
     }
 

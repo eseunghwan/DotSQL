@@ -31,7 +31,9 @@ Supported Databases:
 <br />
 
 # Install
-nuget package is not available not
+```bash
+dotnet add package DotSQL
+```
 
 <br />
 <br />

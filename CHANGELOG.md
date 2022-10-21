@@ -21,3 +21,12 @@
 ## 0.0.4
 - add exception catch to 'Result.ParseRow'.
   - now add null value correctly.
+
+<br />
+
+## 0.0.5
+- change 'RawConnection' from method to getter.
+  - before return, check connection and if failed, throw 'ConnectionFailedException'.
+- add license to nuget package.
+- add 'README.md' to nuget package.
+- add github url to nuget package.

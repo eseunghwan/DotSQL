@@ -4,7 +4,7 @@ using System;
 namespace DotSQL.Builder {
     namespace Interfaces {
         public interface IBuilder {
-            String ConnectionString { get; }
+            public String ConnectionString { get; }
         }
     }
 

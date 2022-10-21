@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
 
         <OutputPath>build</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -10,9 +10,13 @@
 
     <PropertyGroup>
         <PackageId>DotSQL</PackageId>
-        <Version>0.0.4</Version>
+        <Version>0.0.5</Version>
         <Authors>eseunghwan</Authors>
         <Company>Integrated.Design.Division</Company>
+
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/eseunghwan/DotSQL</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
