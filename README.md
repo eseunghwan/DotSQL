@@ -10,7 +10,7 @@
 Available for:
 
 - .NET Standard 2.0
-- .NET 5.0+
+- .NET 6.0+
 
 <br />
 Supported Platforms:
