@@ -30,3 +30,11 @@
 - add license to nuget package.
 - add 'README.md' to nuget package.
 - add github url to nuget package.
+
+<br />
+
+## 0.0.6
+- change namespaces.
+- create new namespaces(Sequential).
+- add 'AsRecord', 'AsJson', 'AsDataFrame' to Engine Result.
+- upgrade version of 'MySqlConnector' and 'System.Data.SQLite'.

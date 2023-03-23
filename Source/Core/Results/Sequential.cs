@@ -2,19 +2,22 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.Data;
 using System.Data.Common;
+using PandasNet;
+using static PandasNet.PandasApi;
 
 
-namespace DotSQL.Core {
-    public class ResultSet {
+namespace DotSQL.Core.Results {
+    public class SequentialResultSet {
         public ReadOnlyCollection<DbColumn> Columns { get; set; }
         public List<List<dynamic>> Datas { get; set; }
     }
 
 
-    public class Result {
-        private ResultSet Resultset;
+    public class SequentialResult {
+        private SequentialResultSet Resultset;
 
         private static List<dynamic> ParseRow(DbDataReader reader, ReadOnlyCollection<DbColumn> columns) {
             var row = new List<dynamic>();
@@ -100,45 +103,45 @@ namespace DotSQL.Core {
             return row;
         }
 
-        public static Result BuildSqliteResult(System.Data.SQLite.SQLiteDataReader reader) {
+        public static SequentialResult BuildSqliteResult(System.Data.SQLite.SQLiteDataReader reader) {
             try {
                 var columns = reader.GetColumnSchema();
                 var datas = new List<List<dynamic>>();
                 while (reader.Read()) {
-                    datas.Add(Result.ParseRow(reader, columns));
+                    datas.Add(SequentialResult.ParseRow(reader, columns));
                 }
 
-                return new Result(new ResultSet { Columns = columns, Datas = datas });
+                return new SequentialResult(new SequentialResultSet { Columns = columns, Datas = datas });
             }
             catch (Exception e) {
                 throw new Exceptions.BuildResultFailedException(e.Message, e.InnerException);
             }
         }
 
-        public static Result BuildMysqlResult(MySqlConnector.MySqlDataReader reader) {
+        public static SequentialResult BuildMysqlResult(MySqlConnector.MySqlDataReader reader) {
             try {
                 var columns = reader.GetColumnSchema();
                 var datas = new List<List<dynamic>>();
                 while (reader.Read()) {
-                    datas.Add(Result.ParseRow(reader, columns));
+                    datas.Add(SequentialResult.ParseRow(reader, columns));
                 }
 
-                return new Result(new ResultSet { Columns = columns, Datas = datas });
+                return new SequentialResult(new SequentialResultSet { Columns = columns, Datas = datas });
             }
             catch (Exception e) {
                 throw new Exceptions.BuildResultFailedException(e.Message, e.InnerException);
             }
         }
 
-        public static Result BuildMariadbResult(MySqlConnector.MySqlDataReader reader) {
-            return Result.BuildMysqlResult(reader);
+        public static SequentialResult BuildMariadbResult(MySqlConnector.MySqlDataReader reader) {
+            return SequentialResult.BuildMysqlResult(reader);
         }
 
-        public Result(ResultSet resultSet) {
+        public SequentialResult(SequentialResultSet resultSet) {
             this.Resultset = resultSet;
         }
 
-        public List<Dictionary<String, dynamic>> AsDict() {
+        public List<Dictionary<String, dynamic>> AsRecord() {
             try {
                 var result = new List<Dictionary<String, dynamic>>();
                 foreach (var data in this.Resultset.Datas) {
@@ -154,6 +157,39 @@ namespace DotSQL.Core {
             }
             catch (Exception e) {
                 throw new Exceptions.ResultConversionFailedException(e.Message, e.InnerException);
+            }
+        }
+
+        public Dictionary<String, List<dynamic>> AsDict() {
+            try {
+                var result = new Dictionary<String, List<dynamic>>();
+                for (var cidx = 0; cidx < this.Resultset.Columns.Count; cidx++) {
+                    var column = this.Resultset.Columns[cidx].ColumnName;
+                    if (!result.ContainsKey(column)) {
+                        result[column] = new List<dynamic>();
+                    }
+
+                    foreach (var data in this.Resultset.Datas) {
+                        result[column].Add(data[cidx]);
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception e) {
+                throw new Exceptions.ResultConversionFailedException(e.Message, e.InnerException);
+            }
+        }
+
+        public String AsJson(String jsonType = "dict") {
+            if (jsonType.ToLower() == "dict") {
+                return JsonConvert.SerializeObject(this.AsDict());
+            }
+            else if (jsonType.ToLower() == "record") {
+                return JsonConvert.SerializeObject(this.AsRecord());
+            }
+            else {
+                throw new Exceptions.ResultConversionFailedException($"Unsupported type: {jsonType}");
             }
         }
 
@@ -176,6 +212,15 @@ namespace DotSQL.Core {
                 }
 
                 return result;
+            }
+            catch (Exception e) {
+                throw new Exceptions.ResultConversionFailedException(e.Message, e.InnerException);
+            }
+        }
+
+        public DataFrame AsDataFrame() {
+            try {
+                return pd.DataFrame.from_dict(this.AsJson("dict"));
             }
             catch (Exception e) {
                 throw new Exceptions.ResultConversionFailedException(e.Message, e.InnerException);

@@ -1,7 +1,7 @@
 
 using System;
 
-namespace DotSQL.Builder {
+namespace DotSQL.Builders.Sequential {
     namespace Interfaces {
         public interface IBuilder {
             public String ConnectionString { get; }

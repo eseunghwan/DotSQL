@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+        <TargetFramework>net7.0</TargetFramework>
 
         <OutputPath>build</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -10,7 +10,7 @@
 
     <PropertyGroup>
         <PackageId>DotSQL</PackageId>
-        <Version>0.0.5</Version>
+        <Version>0.0.6</Version>
         <Authors>eseunghwan</Authors>
         <Company>Integrated.Design.Division</Company>
 
@@ -25,8 +25,9 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-        <PackageReference Include="MySqlConnector" Version="2.1.13" />
-        <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
+        <PackageReference Include="MySqlConnector" Version="2.2.5" />
+        <PackageReference Include="Pandas.Net" Version="0.4.0" />
+        <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
     </ItemGroup>
 
 </Project>
